@@ -21,12 +21,9 @@ use Symfony\Component\Routing\Attribute\Route;
         $this->entitymanager = $entityManager;
     }
 
-    #[Route('/', name: 'adherants')]
+    #[Route('/adherant', name: 'adherants')]
     public function index(EntityManagerInterface $entityManager, AdherantsRepository $adherants, Request $request): Response
     {
-
-        $adherentsLessThanOneYear = $adherants->countAdherentsLessThanOneYear();
-        $adherentsMoreThanOneYear = $adherants->countAdherentsMoreThanOneYear();
         $totalAdherents = $entityManager->getRepository(Adherants::class)->count([]);
 
         $search = new Search();
@@ -37,10 +34,21 @@ use Symfony\Component\Routing\Attribute\Route;
         } else {
             $adherants = $this->entitymanager->getRepository(Adherants::class)->findAll();
         }
+        $adherantsLessThanOneYear = [];
+        $adherantsMoreThanOneYear = [];
+        foreach ($adherants as $adherant) {
+            $startDate = $adherant->getDateAdhesion();
+            $difference = (new \DateTime())->diff($startDate)->days;
 
+            if ($difference <= 365) {
+                $adherantsLessThanOneYear[] = $adherant;
+            } else {
+                $adherantsMoreThanOneYear[] = $adherant;
+            }
+        }
         return $this->render('adherants/index.html.twig', [
-            'adherentsLessThanOneYear' => $adherentsLessThanOneYear,
-            'adherentsMoreThanOneYear' => $adherentsMoreThanOneYear,
+            'adherantsLessThanOneYear' => $adherantsLessThanOneYear,
+            'adherantsMoreThanOneYear' => $adherantsMoreThanOneYear,
             'form'=>$form->createView(),
             'total_adherents' => $totalAdherents,
             'adherants' => $adherants,

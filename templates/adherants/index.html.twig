@@ -9,16 +9,19 @@
 
 {% block body %}
 
-    <a href="/admin">admin</a>
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="/admin">admin</a>
+    {% endif %}
     <h2>Nombre de personne enregistrées :{{total_adherents}}</h2>
-    <p>Nombre d'adhérents depuis moins d'un an : {{ adherentsLessThanOneYear }}</p>
-    <p>Nombre d'adhérents depuis plus d'un an : {{ adherentsMoreThanOneYear }}</p>
+    <h2>Nombre de personnes enregistrées depuis moins d'un an : {{ adherantsLessThanOneYear|length }}</h2>
+    <h2>Nombre de personnes enregistrées depuis plus d'un an : {{ adherantsMoreThanOneYear|length }}</h2>
 
     {{ form(form) }}
-
+    <a href="{{ path('adherants') }}">Tout afficher</a>
     <div class="tableaux_container">
 
             <table class="myTable">
+                <caption>Adhérants valides</caption>
                 <thead>
                     <tr>
                         <th scope="col">Nom</th>
@@ -32,10 +35,10 @@
                 {% for adherant in adherants %}
                     {% set startDate = adherant.dateAdhesion %} <!-- On récupère la valeur de la date d'adhésion -->
                     {% set difference = date( 'now' | date() ).diff(date(startDate)).days %}<!-- On compare la date actuelle avec la valeur de startDate, pour obtenir soit une valeur < 365 soit > 365 -->
-                    <tbody>
+                    <tbody class="tbody_table">
                     {% if difference <= 365 %}
-                        <tr style="color: green;">
-                            <th scope="row" >{{ adherant.nom }}</th>
+                        <tr class="row_positive">
+                            <td>{{ adherant.nom }}</td>
                             <td>{{ adherant.prenom }}</td>
                             <td>{{ adherant.ville }}</td>
                             <td>{{ adherant.codePostal }}</td>
@@ -48,6 +51,7 @@
             </table>
 
         <table class="myTable2">
+            <caption>Adhérants non-valides</caption>
             <thead>
                 <tr>
                     <th scope="col">Nom</th>
@@ -62,10 +66,10 @@
                 {% set startDate = adherant.dateAdhesion %} <!-- On récupère la valeur de la date d'adhésion -->
                 {% set difference = date( 'now' | date() ).diff(date(startDate)).days %}<!-- On compare la date actuelle avec la valeur de startDate, pour obtenir soit une valeur < 1 soit > 1 -->
                 {% set years = difference|number_format(0) %} <!-- Ici, on fait la conversion de la date qui est un string en integer, pour pouvoir l'utiliser dans une condition if -->
-                    <tbody>
+                    <tbody class="tbody_table2">
                         {% if years > 365 %}
-                            <tr style="color: red;">
-                                <th scope="row" >{{ adherant.nom }}</th>
+                            <tr class="row_negative">
+                                <td>{{ adherant.nom }}</td>
                                 <td>{{ adherant.prenom }}</td>
                                 <td>{{ adherant.ville }}</td>
                                 <td>{{ adherant.codePostal }}</td>

@@ -18,14 +18,21 @@ class SearchType extends AbstractType { //Formulaire de notre recherche custom
             ->add('string', TextType::class, [ // 1er champs qui sera une recherche textuelle
                 'label' => false,
                 'required' => false,
+                'row_attr'=> [
+                    'class'=>'form-row'
+                ],
                 'attr'=> [
-                    'placeholder' => 'Votre recherche ...'
+                    'placeholder' => 'Votre recherche ...',
+                    'class'=> 'form'
                 ]
             ])
             ->add('submit', SubmitType::class, [
                 'label'=>'filtrer',
+                'row_attr'=> [
+                    'class'=>'form-row'
+                ],
                 'attr'=> [
-                    'class'=> 'btn-block btn-info'
+                    'class'=> 'btn'
                 ]
             ])
         ;

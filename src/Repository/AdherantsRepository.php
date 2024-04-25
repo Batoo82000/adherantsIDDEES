@@ -18,6 +18,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 #[AllowDynamicProperties] class AdherantsRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Adherants::class);
+    }
     public function searchByName(Search $search): array
     {
         $qb = $this->createQueryBuilder('a');
@@ -32,31 +36,8 @@ use Doctrine\Persistence\ManagerRegistry;
         // La méthode exécute la requête en appelant getQuery() pour obtenir l'objet Query correspondant à la requête construite, puis getResult() pour obtenir les résultats de la requête sous forme de tableau de produits.
         return $qb->getQuery()->getResult();
     }
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Adherants::class);
-    }
 
-    public function countAdherentsLessThanOneYear(): int
-    {
-        $qb = $this->createQueryBuilder('a');
 
-        $qb->select('COUNT(a.id)')
-            ->where($qb->expr()->lte($qb->expr()->diff('CURRENT_DATE()', 'a.dateAdhesion'), '365'))
-        ;
-
-        return $qb->getQuery()->getSingleScalarResult();
-    }
-    public function countAdherentsMoreThanOneYear(): int
-    {
-        $qb = $this->createQueryBuilder('a');
-
-        $qb->select('COUNT(a.id)')
-            ->where($qb->expr()->gt($qb->expr()->diff('CURRENT_DATE()', 'a.dateAdhesion'), '365'))
-        ;
-
-        return $qb->getQuery()->getSingleScalarResult();
-    }
 
     //    /**
     //     * @return Adherants[] Returns an array of Adherants objects

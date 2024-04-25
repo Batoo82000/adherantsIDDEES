@@ -1,0 +1,39 @@
+form {
+    background-color: rosybrown;
+}
+
+
+
+.tableaux_container {
+    display: flex;
+    justify-content: space-around;
+}
+caption {
+    font-size: 30px;
+}
+.row_negative{
+    color: red;
+}
+.row_positive{
+    color: green;
+}
+tbody + tr{
+    background-color: blue;
+}
+.tbody_table:nth-child(odd) {
+    background-color: lightblue;
+}
+.tbody_table:nth-child(even) {
+    background-color: lightcyan;
+}
+.tbody_table2:nth-child(odd) {
+    background-color: lightyellow;
+}
+.tbody_table2:nth-child(even) {
+    background-color: lightpink;
+}
+td, th {
+    border: 1px solid black;
+    padding : 5px;
+    border-radius: 5px;
+}

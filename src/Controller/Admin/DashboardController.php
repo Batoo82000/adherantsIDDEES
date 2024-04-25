@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Adherants;
 use App\Entity\Site;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -47,5 +48,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToUrl('Retourner au site', 'fa fa-home', $this->generateUrl('adherants'));
          yield MenuItem::linkToCrud('Liste des adhérants', 'fas fa-person', Adherants::class);
          yield MenuItem::linkToCrud('les sites d\'IDDEES', 'fas fa-store', Site::class);
+         yield MenuItem::linkToCrud('Gestion des Utilisateurs', 'fas fa-user', User::class);
     }
 }
