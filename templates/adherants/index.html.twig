@@ -8,16 +8,30 @@
 
 
 {% block body %}
+<nav class="navbar">
+    <ul class="ul_navbar">
+        <li class="li_navbar">
+            Vous êtes connecté en tant que : {{ app.user.username }}
+        </li>
+        {% if is_granted("ROLE_ADMIN") %}
+            <li class="li_navbar">
+                <a href="/admin">Console d'administration</a>
+            </li>
+        {% endif %}
+        <li class="li_navbar">
+            <a href="/logout">Se déconnecter</a>
+        </li>
+    </ul>
+</nav>
 
-    {% if is_granted("ROLE_ADMIN") %}
-        <a href="/admin">admin</a>
-    {% endif %}
-    <h2>Nombre de personne enregistrées :{{total_adherents}}</h2>
-    <h2>Nombre de personnes enregistrées depuis moins d'un an : {{ adherantsLessThanOneYear|length }}</h2>
-    <h2>Nombre de personnes enregistrées depuis plus d'un an : {{ adherantsMoreThanOneYear|length }}</h2>
+    <div class="totaux">
+        <h2>Nombre de personne enregistrées : {{total_adherents}}</h2>
+        <h2 class="total_pos">Nombre de personnes enregistrées depuis moins d'un an : {{ adherantsLessThanOneYear|length }}</h2>
+        <h2>Nombre de personnes enregistrées depuis plus d'un an : {{ adherantsMoreThanOneYear|length }}</h2>
+    </div>
 
     {{ form(form) }}
-    <a href="{{ path('adherants') }}">Tout afficher</a>
+    <a href="{{ path('adherants') }}" class="all">Remise à zéro</a>
     <div class="tableaux_container">
 
             <table class="myTable">
@@ -38,8 +52,8 @@
                     <tbody class="tbody_table">
                     {% if difference <= 365 %}
                         <tr class="row_positive">
-                            <td>{{ adherant.nom }}</td>
-                            <td>{{ adherant.prenom }}</td>
+                            <td>{{ adherant.nom | upper }}</td>
+                            <td>{{ adherant.prenom | upper }}</td>
                             <td>{{ adherant.ville }}</td>
                             <td>{{ adherant.codePostal }}</td>
                             <td>{{ adherant.dateAdhesion | date("d/m/Y")}}</td>
@@ -69,8 +83,8 @@
                     <tbody class="tbody_table2">
                         {% if years > 365 %}
                             <tr class="row_negative">
-                                <td>{{ adherant.nom }}</td>
-                                <td>{{ adherant.prenom }}</td>
+                                <td>{{ adherant.nom | upper }}</td>
+                                <td>{{ adherant.prenom | upper }}</td>
                                 <td>{{ adherant.ville }}</td>
                                 <td>{{ adherant.codePostal }}</td>
                                 <td>{{ adherant.dateAdhesion | date("d/m/Y")}}</td>

@@ -2,8 +2,14 @@
 
 {% block title %}Adhérant IDDEES{% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/css/accueil.css')}}">
+{% endblock %}
+
 {% block body %}
 
-    <a href="{{ path('app_login') }}">Connexion</a>
-    
+<div class="container_connexion">
+    <a class="connexion_accueil" href="{{ path('app_login') }}">Connexion</a>
+</div>
+
 {% endblock %}

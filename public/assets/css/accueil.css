@@ -1,0 +1,20 @@
+.container_connexion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+    width: 100vw;
+}
+.connexion_accueil {
+    color: black;
+    text-decoration: none;
+    padding: 20px 30px;
+    border-radius: 10px;
+    background-color: #c9f9ff;
+    font-size: 50px;
+}
+.connexion_accueil:hover {
+    transition: 0.2s ease-in-out;
+    background: #90d7ff;
+    box-shadow: 10px 10px 20px lightblue;
+}

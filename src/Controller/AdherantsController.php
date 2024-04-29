@@ -25,18 +25,14 @@ use Symfony\Component\Routing\Attribute\Route;
     public function index(EntityManagerInterface $entityManager, AdherantsRepository $adherants, Request $request): Response
     {
         $totalAdherents = $entityManager->getRepository(Adherants::class)->count([]);
-
+        $adherantsCount = $entityManager->getRepository(Adherants::class)->findAll();
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-            $adherants = $this->entitymanager->getRepository(Adherants::class)->searchByName($search);
-        } else {
-            $adherants = $this->entitymanager->getRepository(Adherants::class)->findAll();
-        }
         $adherantsLessThanOneYear = [];
         $adherantsMoreThanOneYear = [];
-        foreach ($adherants as $adherant) {
+
+        foreach ($adherantsCount as $adherant) {
             $startDate = $adherant->getDateAdhesion();
             $difference = (new \DateTime())->diff($startDate)->days;
 
@@ -46,12 +42,24 @@ use Symfony\Component\Routing\Attribute\Route;
                 $adherantsMoreThanOneYear[] = $adherant;
             }
         }
+        if($form->isSubmitted() && $form->isValid() && !empty($search->string)) {
+            $adherants = $this->entitymanager->getRepository(Adherants::class)->searchByName($search);
+            return $this->render('adherants/index.html.twig', [
+                'adherantsLessThanOneYear' => $adherantsLessThanOneYear,
+                'adherantsMoreThanOneYear' => $adherantsMoreThanOneYear,
+                'form'=>$form->createView(),
+                'total_adherents' => $totalAdherents,
+                'adherants' => $adherants,
+            ]);
+        }
+        else {
         return $this->render('adherants/index.html.twig', [
             'adherantsLessThanOneYear' => $adherantsLessThanOneYear,
             'adherantsMoreThanOneYear' => $adherantsMoreThanOneYear,
             'form'=>$form->createView(),
             'total_adherents' => $totalAdherents,
-            'adherants' => $adherants,
+            'adherants' => [],
         ]);
+        }
     }
 }
